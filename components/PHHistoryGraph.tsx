@@ -101,11 +101,10 @@ export default function PHHistoryGraph() {
           <button
             key={r}
             onClick={() => setRange(r)}
-            className={`flex-1 py-1.5 text-[10px] font-bold rounded-md transition-all uppercase ${
-              range === r
-                ? "bg-white text-blue-600 shadow-sm"
-                : "text-slate-500 hover:text-slate-700"
-            }`}
+            className={`flex-1 py-1.5 text-[10px] font-bold rounded-md transition-all uppercase ${range === r
+              ? "bg-white text-blue-600 shadow-sm"
+              : "text-slate-500 hover:text-slate-700"
+              }`}
           >
             {r === "hour"
               ? "Jam"
@@ -164,7 +163,12 @@ export default function PHHistoryGraph() {
                     dy={15}
                   />
                   <YAxis
-                    domain={[4, 10]}
+                    domain={[
+                      (dataMin: number) =>
+                        Math.max(0, parseFloat((dataMin - 0.5).toFixed(1))),
+                      (dataMax: number) =>
+                        Math.min(14, parseFloat((dataMax + 0.5).toFixed(1))),
+                    ]}
                     fontSize={11}
                     tickLine={false}
                     axisLine={false}

@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 
 const { auth } = NextAuth(authConfig);
 
-export const proxy = auth((req) => {
+export default auth((req) => {
   try {
     const isLoggedIn = !!req.auth;
     const userRole = (req.auth?.user as any)?.role;
@@ -21,7 +21,10 @@ export const proxy = auth((req) => {
     }
 
     // 1. Tentukan halaman publik yang boleh diakses tanpa login sama sekali
-    const isPublicPage = pathname === "/login" || pathname === "/signup";
+    const isPublicPage =
+      pathname === "/login" ||
+      pathname === "/signup" ||
+      pathname.startsWith("/forgot-password");
 
     // 2. LOGIKA ADMIN - Proteksi halaman admin berdasarkan NextAuth role
     // Handle legacy /admin/login URL to prevent 404

@@ -82,6 +82,14 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
+            <div className="mt-2 text-right">
+              <Link
+                href="/forgot-password"
+                className="text-sm text-blue-600 hover:underline"
+              >
+                Lupa Password?
+              </Link>
+            </div>
           </div>
           {error && <p className="text-red-500 text-xs text-center">{error}</p>}
           <button

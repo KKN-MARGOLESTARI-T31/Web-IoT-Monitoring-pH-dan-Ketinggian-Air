@@ -8,15 +8,16 @@ datasource db {
 }
 
 model User {
-  id            String         @id @default(cuid())
-  phone         String         @unique // Phone number as unique identifier
-  fullName      String         @default("Unknown") // Full name (required)
-  password      String
-  role          String         @default("user")
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
-  adminMessages AdminMessage[]
-  pumpHistory   PumpHistory[]
+  id                   String                 @id @default(cuid())
+  phone                String                 @unique // Phone number as unique identifier
+  fullName             String                 @default("Unknown") // Full name (required)
+  password             String
+  role                 String                 @default("user")
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime               @updatedAt
+  adminMessages        AdminMessage[]
+  pumpHistory          PumpHistory[]
+  passwordResetTokens  PasswordResetToken[]
 }
 
 model PHReading {
@@ -158,4 +159,21 @@ model ApiKey {
   lastUsed  DateTime?
 
   @@map("api_keys")
+}
+
+model PasswordResetToken {
+  id          String   @id @default(cuid())
+  userId      String
+  phoneNumber String
+  otpCode     String
+  expiresAt   DateTime
+  isUsed      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  attempts    Int      @default(0)
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([phoneNumber])
+  @@index([expiresAt])
+  @@map("password_reset_tokens")
 }

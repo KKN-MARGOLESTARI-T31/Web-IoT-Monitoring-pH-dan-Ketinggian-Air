@@ -1,0 +1,844 @@
+!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Panduan Pengguna – TEGASU IoT Monitoring</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+    :root {
+      --primary: #1e40af;
+      --primary-light: #3b82f6;
+      --accent: #06b6d4;
+      --green: #16a34a;
+      --red: #dc2626;
+      --yellow: #d97706;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #e2e8f0;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* ── COVER ── */
+    .cover {
+      background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 40%, #0284c7 100%);
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 3rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .cover::before {
+      content: '';
+      position: absolute;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+      top: -150px; right: -150px;
+    }
+    .cover::after {
+      content: '';
+      position: absolute;
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.05);
+      bottom: -100px; left: -100px;
+    }
+    .cover-logo {
+      font-size: 3.5rem;
+      font-weight: 800;
+      letter-spacing: 4px;
+      margin-bottom: 0.5rem;
+      position: relative; z-index: 1;
+    }
+    .cover-subtitle {
+      font-size: 1.1rem;
+      opacity: 0.8;
+      margin-bottom: 2rem;
+      position: relative; z-index: 1;
+    }
+    .cover-divider {
+      width: 80px; height: 3px;
+      background: rgba(255,255,255,0.5);
+      border-radius: 2px;
+      margin: 1.5rem auto;
+      position: relative; z-index: 1;
+    }
+    .cover-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      position: relative; z-index: 1;
+    }
+    .cover-desc {
+      font-size: 1rem;
+      opacity: 0.75;
+      max-width: 500px;
+      position: relative; z-index: 1;
+    }
+    .cover-badges {
+      display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center;
+      margin-top: 2.5rem;
+      position: relative; z-index: 1;
+    }
+    .badge {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      padding: 0.4rem 1rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    /* ── LAYOUT ── */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+
+    /* ── TOC ── */
+    .toc-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      margin: 2rem 0;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    .toc-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .toc-list { list-style: none; }
+    .toc-list li { padding: 0.3rem 0; border-bottom: 1px dashed var(--border); }
+    .toc-list li:last-child { border-bottom: none; }
+    .toc-list a {
+      text-decoration: none;
+      color: var(--text);
+      font-size: 0.9rem;
+      display: flex; justify-content: space-between;
+      transition: color 0.2s;
+    }
+    .toc-list a:hover { color: var(--primary-light); }
+    .toc-num {
+      font-weight: 700;
+      color: var(--primary-light);
+      margin-right: 0.5rem;
+    }
+
+    /* ── SECTION ── */
+    .section {
+      margin: 2.5rem 0;
+    }
+    .section-header {
+      display: flex; align-items: center; gap: 1rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 2px solid var(--primary-light);
+    }
+    .section-num {
+      background: var(--primary);
+      color: white;
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+    .section-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    }
+    .card-title {
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: 0.75rem;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+
+    /* ── INFO BOXES ── */
+    .info-box {
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      margin: 1rem 0;
+      display: flex; gap: 0.75rem; align-items: flex-start;
+    }
+    .info-box.blue { background: #eff6ff; border-left: 4px solid #3b82f6; }
+    .info-box.green { background: #f0fdf4; border-left: 4px solid #22c55e; }
+    .info-box.yellow { background: #fffbeb; border-left: 4px solid #f59e0b; }
+    .info-box.red { background: #fef2f2; border-left: 4px solid #ef4444; }
+    .info-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 2px; }
+    .info-text { font-size: 0.875rem; }
+    .info-text strong { display: block; margin-bottom: 0.2rem; }
+
+    /* ── STEPS ── */
+    .steps { list-style: none; counter-reset: step; }
+    .steps li {
+      counter-increment: step;
+      display: flex; gap: 1rem; margin-bottom: 1rem;
+      align-items: flex-start;
+    }
+    .steps li::before {
+      content: counter(step);
+      background: var(--primary-light);
+      color: white;
+      min-width: 28px; height: 28px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem; font-weight: 700;
+      flex-shrink: 0; margin-top: 2px;
+    }
+    .steps li p { font-size: 0.9rem; }
+    .steps li strong { color: var(--primary); }
+
+    /* ── FEATURE GRID ── */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1rem;
+    }
+    .feature-item {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem;
+    }
+    .feature-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
+    .feature-name { font-weight: 700; font-size: 0.9rem; margin-bottom: 0.3rem; }
+    .feature-desc { font-size: 0.8rem; color: var(--muted); }
+
+    /* ── TABLE ── */
+    .table-wrap { overflow-x: auto; margin: 1rem 0; }
+    table {
+      width: 100%; border-collapse: collapse;
+      font-size: 0.875rem;
+    }
+    th {
+      background: var(--primary);
+      color: white;
+      padding: 0.6rem 1rem;
+      text-align: left;
+    }
+    td { padding: 0.6rem 1rem; border-bottom: 1px solid var(--border); }
+    tr:nth-child(even) td { background: #f8fafc; }
+
+    /* ── BADGE STATUS ── */
+    .status { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.75rem; font-weight: 600; }
+    .status.green { background: #dcfce7; color: #166534; }
+    .status.yellow { background: #fef9c3; color: #854d0e; }
+    .status.red { background: #fee2e2; color: #991b1b; }
+    .status.orange { background: #ffedd5; color: #9a3412; }
+
+    /* ── FOOTER ── */
+    .footer {
+      background: #1e293b;
+      color: #94a3b8;
+      text-align: center;
+      padding: 2.5rem 1rem;
+      margin-top: 3rem;
+      font-size: 0.85rem;
+    }
+    .footer strong { color: white; }
+
+    /* ── PRINT ── */
+    @media print {
+      .cover { min-height: auto; padding: 2rem; page-break-after: always; }
+      .section { page-break-inside: avoid; }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      .cover-title { font-size: 1.5rem; }
+      .cover-logo { font-size: 2.5rem; }
+      .feature-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════
+     COVER PAGE
+═══════════════════════════════════════════════════ -->
+<div class="cover">
+  <div class="cover-logo">TEGASU</div>
+  <div class="cover-subtitle">Teknologi Pertanian &amp; Akuakultur Terpadu</div>
+  <div class="cover-divider"></div>
+  <div class="cover-title">📖 Panduan Pengguna</div>
+  <p class="cover-desc">
+    Panduan lengkap penggunaan sistem monitoring IoT untuk pH air dan ketinggian air sawah/kolam berbasis web.
+  </p>
+  <div class="cover-badges">
+    <span class="badge">🌊 Monitoring pH Real-time</span>
+    <span class="badge">💧 Kontrol Pompa Air</span>
+    <span class="badge">📊 Riwayat & Grafik</span>
+    <span class="badge">🔒 Manajemen Akun</span>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     MAIN CONTENT
+═══════════════════════════════════════════════════ -->
+<div class="container">
+
+  <!-- DAFTAR ISI -->
+  <div class="toc-card">
+    <div class="toc-title">📋 Daftar Isi</div>
+    <ul class="toc-list">
+      <li><a href="#s1"><span><span class="toc-num">1.</span> Pengenalan Sistem</span><span>▸</span></a></li>
+      <li><a href="#s2"><span><span class="toc-num">2.</span> Cara Login & Daftar Akun</span><span>▸</span></a></li>
+      <li><a href="#s3"><span><span class="toc-num">3.</span> Lupa Password</span><span>▸</span></a></li>
+      <li><a href="#s4"><span><span class="toc-num">4.</span> Dashboard Utama</span><span>▸</span></a></li>
+      <li><a href="#s5"><span><span class="toc-num">5.</span> Memahami Status pH</span><span>▸</span></a></li>
+      <li><a href="#s6"><span><span class="toc-num">6.</span> Kontrol Pompa Air</span><span>▸</span></a></li>
+      <li><a href="#s7"><span><span class="toc-num">7.</span> Halaman Profil</span><span>▸</span></a></li>
+      <li><a href="#s8"><span><span class="toc-num">8.</span> Admin Dashboard</span><span>▸</span></a></li>
+      <li><a href="#s9"><span><span class="toc-num">9.</span> Pesan dari Administrator</span><span>▸</span></a></li>
+      <li><a href="#s10"><span><span class="toc-num">10.</span> Troubleshooting</span><span>▸</span></a></li>
+    </ul>
+  </div>
+
+
+  <!-- ─── SECTION 1: PENGENALAN ─── -->
+  <div class="section" id="s1">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <div class="section-title">Pengenalan Sistem</div>
+    </div>
+
+    <p style="margin-bottom:1rem; font-size:0.95rem;">
+      <strong>TEGASU</strong> adalah platform monitoring IoT berbasis web yang dirancang untuk membantu petani dan pekebun
+      memantau kondisi air secara real-time. Sistem ini menghubungkan perangkat sensor (ESP32) di lapangan
+      dengan dasbor web yang dapat diakses dari mana saja.
+    </p>
+
+    <div class="feature-grid">
+      <div class="feature-item">
+        <div class="feature-icon">🔬</div>
+        <div class="feature-name">Sensor pH Real-time</div>
+        <div class="feature-desc">Memantau kadar keasaman/kebasaan air kolam dan sawah secara langsung.</div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">🌊</div>
+        <div class="feature-name">Selisih Ketinggian Air</div>
+        <div class="feature-desc">Menampilkan selisih permukaan air dalam satuan sentimeter (cm).</div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">🔋</div>
+        <div class="feature-name">Status Baterai Perangkat</div>
+        <div class="feature-desc">Memantau daya baterai sensor IoT di lapangan.</div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">📶</div>
+        <div class="feature-name">Sinyal GSM (CSQ)</div>
+        <div class="feature-desc">Memantau kekuatan sinyal jaringan perangkat ESP32.</div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">💧</div>
+        <div class="feature-name">Kontrol Pompa Air</div>
+        <div class="feature-desc">Hidupkan/matikan pompa dari mana saja dengan timer otomatis.</div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">📊</div>
+        <div class="feature-name">Grafik Riwayat pH</div>
+        <div class="feature-desc">Melihat tren perubahan pH dari waktu ke waktu dalam bentuk grafik.</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ─── SECTION 2: LOGIN & DAFTAR ─── -->
+  <div class="section" id="s2">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <div class="section-title">Cara Login &amp; Daftar Akun</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🔑 Cara Masuk (Login)</div>
+      <ol class="steps">
+        <li><p>Buka browser dan akses URL aplikasi TEGASU.</p></li>
+        <li><p>Masukkan <strong>Nomor Telepon</strong> yang terdaftar (contoh: <code>0812xxxxxxxx</code>).</p></li>
+        <li><p>Masukkan <strong>Password</strong> Anda. Klik ikon 👁 untuk menampilkan/menyembunyikan password.</p></li>
+        <li><p>Klik tombol <strong>"Masuk"</strong>.</p></li>
+        <li><p>Sistem akan otomatis mengarahkan ke <strong>Dashboard</strong> (pengguna biasa) atau <strong>Admin Dashboard</strong> (administrator).</p></li>
+      </ol>
+      <div class="info-box yellow">
+        <div class="info-icon">⚠️</div>
+        <div class="info-text"><strong>Catatan:</strong> Jika muncul pesan "Nomor telepon atau Password salah!", pastikan nomor telepon dan password yang Anda masukkan sudah benar.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📝 Daftar Akun Baru</div>
+      <ol class="steps">
+        <li><p>Di halaman Login, klik tombol <strong>"Daftar Akun Baru"</strong>.</p></li>
+        <li><p>Isi formulir pendaftaran: Nama, Nomor Telepon, dan Password.</p></li>
+        <li><p>Klik <strong>"Daftar"</strong> untuk menyelesaikan pendaftaran.</p></li>
+      </ol>
+      <div class="info-box blue">
+        <div class="info-icon">ℹ️</div>
+        <div class="info-text"><strong>Info:</strong> Akun baru secara default memiliki peran <em>pengguna biasa</em>. Akun admin hanya dapat dibuat oleh administrator yang sudah ada.</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ─── SECTION 3: LUPA PASSWORD ─── -->
+  <div class="section" id="s3">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <div class="section-title">Lupa Password</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📲 Reset Password via OTP WhatsApp</div>
+      <ol class="steps">
+        <li><p>Di halaman Login, klik tautan <strong>"Lupa Password?"</strong>.</p></li>
+        <li><p>Masukkan <strong>Nomor Telepon</strong> yang terdaftar pada akun Anda.</p></li>
+        <li><p>Klik tombol <strong>"Kirim OTP"</strong>. Kode OTP akan dikirim ke WhatsApp Anda.</p></li>
+        <li><p>Masukkan <strong>kode OTP 6 digit</strong> yang diterima di WhatsApp. Kode berlaku selama <strong>5 menit</strong>.</p></li>
+        <li><p>Setelah OTP terverifikasi, masukkan <strong>password baru</strong> Anda (minimal 6 karakter).</p></li>
+        <li><p>Klik tombol konfirmasi. Password berhasil diubah — silakan login kembali.</p></li>
+      </ol>
+      <div class="info-box red">
+        <div class="info-icon">🔴</div>
+        <div class="info-text"><strong>Penting:</strong> Kode OTP hanya berlaku 5 menit. Jika sudah kadaluarsa, ulangi proses dari langkah 1.</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ─── SECTION 4: DASHBOARD ─── -->
+  <div class="section" id="s4">
+    <div class="section-header">
+      <div class="section-num">4</div>
+      <div class="section-title">Dashboard Utama</div>
+    </div>
+
+    <p style="font-size:0.9rem; margin-bottom:1rem;">
+      Setelah login, Anda akan langsung diarahkan ke <strong>Dashboard IoT</strong>. Halaman ini menampilkan semua data sensor secara real-time dan diperbarui otomatis setiap <strong>5 detik</strong>.
+    </p>
+
+    <div class="card">
+      <div class="card-title">📌 Bagian-bagian Dashboard</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Bagian</th><th>Keterangan</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Header</strong></td><td>Nama pengguna, ikon profil, dan tombol keluar (logout).</td></tr>
+            <tr><td><strong>Pesan Admin</strong></td><td>Kotak notifikasi jika administrator mengirim pesan. Ditampilkan di bagian atas jika ada pesan baru.</td></tr>
+            <tr><td><strong>Informasi Sistem</strong></td><td>Widget baterai dan status sinyal/koneksi perangkat IoT.</td></tr>
+            <tr><td><strong>Status Lahan</strong></td><td>Rekomendasi tindakan untuk Kolam Ikan dan Sawah Padi berdasarkan nilai pH saat ini.</td></tr>
+            <tr><td><strong>Monitoring &amp; Kontrol</strong></td><td>Nilai pH real-time, meter ketinggian air, dan tombol kontrol pompa.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🔋 Widget Baterai</div>
+      <p style="font-size:0.88rem; margin-bottom:0.75rem;">Indikator visual yang menunjukkan daya baterai perangkat IoT di lapangan.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Level</th><th>Status</th><th>Warna</th></tr></thead>
+          <tbody>
+            <tr><td>75% – 100%</td><td>Baterai Baik</td><td><span class="status green">Hijau</span></td></tr>
+            <tr><td>50% – 74%</td><td>Baterai Normal</td><td><span class="status yellow">Kuning</span></td></tr>
+            <tr><td>0% – 49%</td><td>Baterai Kritis</td><td><span class="status red">Merah</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📶 Widget Kekuatan Sinyal (CSQ)</div>
+      <p style="font-size:0.88rem; margin-bottom:0.75rem;">Menampilkan kualitas sinyal GSM perangkat IoT dalam nilai CSQ (0–31).</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Nilai CSQ</th><th>Kualitas</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>31</td><td>Sangat Baik</td><td><span class="status green">Excellent</span></td></tr>
+            <tr><td>20 – 30</td><td>Baik</td><td><span class="status green">Good</span></td></tr>
+            <tr><td>15 – 19</td><td>Cukup</td><td><span class="status yellow">Fair</span></td></tr>
+            <tr><td>10 – 14</td><td>Lemah</td><td><span class="status orange">Weak</span></td></tr>
+            <tr><td>2 – 9</td><td>Sangat Lemah</td><td><span class="status red">Marginal</span></td></tr>
+            <tr><td>0 – 1</td><td>Hampir Putus</td><td><span class="status red">Critical</span></td></tr>
+            <tr><td>99</td><td>Tidak Ada Sinyal</td><td><span class="status red">No Signal</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🌊 Meter Ketinggian Air</div>
+      <p style="font-size:0.88rem;">
+        Menampilkan selisih ketinggian permukaan air dalam satuan <strong>cm</strong>, divisualisasikan sebagai grafik meter animasi berwarna biru. Semakin tinggi nilainya, semakin tinggi permukaan air di lapangan.
+      </p>
+    </div>
+  </div>
+
+
+  <!-- ─── SECTION 5: MEMAHAMI STATUS pH ─── -->
+  <div class="section" id="s5">
+    <div class="section-header">
+      <div class="section-num">5</div>
+      <div class="section-title">Memahami Status pH</div>
+    </div>
+
+    <p style="font-size:0.9rem; margin-bottom:1rem;">
+      Nilai pH ditampilkan secara real-time dalam angka besar berwarna. Warna berubah secara dinamis sesuai nilai pH — dari merah (asam) ke hijau (netral) ke biru (basa).
+      Di bawahnya terdapat <strong>Status Lahan</strong> yang memberikan rekomendasi tindakan.
+    </p>
+
+    <div class="card">
+      <div class="card-title">🐟 pH untuk Kolam Ikan</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Rentang pH</th><th>Status</th><th>Tindakan</th></tr></thead>
+          <tbody>
+            <tr><td>&lt; 4.0</td><td><span class="status red">⚠️ Bahaya</span></td><td>Kuras & Ganti Air Total</td></tr>
+            <tr><td>4.0 – 6.4</td><td><span class="status yellow">⚠️ Air Asam</span></td><td>Lakukan Pengapuran</td></tr>
+            <tr><td>6.5 – 8.5</td><td><span class="status green">✓ Optimal</span></td><td>Pertahankan Kondisi</td></tr>
+            <tr><td>8.6 – 9.5</td><td><span class="status orange">⚠️ Air Basa</span></td><td>Tambah Air Tawar</td></tr>
+            <tr><td>&gt; 9.5</td><td><span class="status red">⚠️ Bahaya</span></td><td>Netralisir Segera</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🌾 pH untuk Sawah Padi</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Rentang pH</th><th>Status</th><th>Tindakan</th></tr></thead>
+          <tbody>
+            <tr><td>&lt; 4.5</td><td><span class="status red">⚠️ Sangat Asam</span></td><td>Kapur Dosis Tinggi</td></tr>
+            <tr><td>4.5 – 5.4</td><td><span class="status orange">⚠️ Kurang Subur</span></td><td>Tabur Dolomit</td></tr>
+            <tr><td>5.5 – 7.0</td><td><span class="status green">✓ Optimal</span></td><td>Lanjut Pemupukan</td></tr>
+            <tr><td>7.1 – 8.0</td><td><span class="status yellow">⚠️ Sedikit Basa</span></td><td>Beri Pupuk ZA</td></tr>
+            <tr><td>&gt; 8.0</td><td><span class="status orange">⚠️ Terlalu Basa</span></td><td>Drainase & Cuci Lahan</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ─── SECTION 6: KONTROL POMPA ─── -->
+  <div class="section" id="s6">
+    <div class="section-header">
+      <div class="section-num">6</div>
+      <div class="section-title">Kontrol Pompa Air</div>
+    </div>
+
+    <p style="font-size:0.9rem; margin-bottom:1rem;">
+      Fitur Kontrol Pompa memungkinkan Anda menghidupkan atau mematikan pompa air dari mana saja,
+      dengan pilihan durasi waktu atau mode manual tanpa batas waktu.
+    </p>
+
+    <div class="card">
+      <div class="card-title">⚡ Menghidupkan Pompa</div>
+      <ol class="steps">
+        <li><p>Gulir ke bagian <strong>Monitoring &amp; Kontrol</strong> di bawah halaman dashboard.</p></li>
+        <li><p>Temukan panel <strong>"Kontrol Pompa"</strong> dengan ikon tetesan air (💧).</p></li>
+        <li><p>Geser toggle ke posisi <strong>ON</strong> (biru). Sebuah modal/jendela akan muncul.</p></li>
+        <li><p>Pilih salah satu opsi durasi:<br>
+          &nbsp;&bull; <strong>Durasi tertentu</strong> (misal: 30 menit, 1 jam, 2 jam, dst.)<br>
+          &nbsp;&bull; <strong>Manual</strong> – pompa aktif sampai dimatikan secara manual.</p></li>
+        <li><p>Klik tombol konfirmasi. Pompa akan aktif dan status berubah menjadi <em>"Pompa Aktif"</em>.</p></li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <div class="card-title">⛔ Mematikan Pompa</div>
+      <ol class="steps">
+        <li><p>Temukan panel <strong>"Kontrol Pompa"</strong>. Status seharusnya menunjukkan pompa sedang aktif.</p></li>
+        <li><p>Geser toggle ke posisi <strong>OFF</strong>. Konfirmasi tidak diperlukan untuk mematikan.</p></li>
+        <li><p>Pompa akan langsung mati dan status kembali ke <em>"Pompa Mati"</em>.</p></li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <div class="card-title">⏱️ Panel Status Pompa</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Status Ditampilkan</th><th>Artinya</th></tr></thead>
+          <tbody>
+            <tr><td><em>Pompa Mati</em></td><td>Pompa sedang tidak aktif.</td></tr>
+            <tr><td><em>Memproses...</em></td><td>Perintah sedang dikirim ke server (tunggu sebentar).</td></tr>
+            <tr><td><em>Pompa Aktif (Manual)</em></td><td>Pompa aktif tanpa batas waktu. Matikan secara manual.</td></tr>
+            <tr><td><em>Sisa Waktu: HH:MM:SS</em></td><td>Pompa terjadwal; hitung mundur sampai pompa otomatis mati.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="info-box yellow">
+      <div class="info-icon">⚠️</div>
+      <div class="info-text">
+        <strong>Catatan Penting:</strong>
+        <ul style="margin-top:0.3rem; margin-left:1.2rem; font-size:0.85rem;">
+          <li>Jika Anda logout saat pompa dalam mode <strong>Manual</strong>, pompa akan otomatis dimatikan.</li>
+          <li>Ada jeda minimal <strong>2 detik</strong> antar perintah untuk mencegah klik ganda.</li>
+          <li>Status pompa disinkronisasi antar semua pengguna yang login setiap 5 detik.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ─── SECTION 7: HALAMAN PROFIL ─── -->
+  <div class="section" id="s7">
+    <div class="section-header">
+      <div class="section-num">7</div>
+      <div class="section-title">Halaman Profil</div>
+    </div>
+
+    <p style="font-size:0.9rem; margin-bottom:1rem;">
+      Halaman Profil dapat diakses dengan menekan ikon 👤 di pojok kanan atas dashboard.
+      Di sini Anda dapat mengelola akun dan melihat riwayat aktivitas.
+    </p>
+
+    <div class="card">
+      <div class="card-title">👤 Informasi Akun</div>
+      <p style="font-size:0.88rem;">Menampilkan nama pengguna dan nomor telepon yang terdaftar.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🔋 Riwayat Aktivasi Pompa</div>
+      <ol class="steps">
+        <li><p>Klik menu <strong>"Riwayat Pompa"</strong> di halaman Profil.</p></li>
+        <li><p>Sebuah modal muncul menampilkan 20 riwayat terakhir aktivasi pompa.</p></li>
+        <li><p>Setiap entri menampilkan: status (Dihidupkan/Dimatikan), siapa yang mengubah, dan kapan waktunya.</p></li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📈 Riwayat pH (Grafik)</div>
+      <ol class="steps">
+        <li><p>Klik menu <strong>"Riwayat pH"</strong> di halaman Profil.</p></li>
+        <li><p>Grafik interaktif akan ditampilkan, menunjukkan tren perubahan nilai pH dari waktu ke waktu.</p></li>
+        <li><p>Klik tombol <strong>"Tutup"</strong> untuk menutup grafik.</p></li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🔒 Ubah Password</div>
+      <ol class="steps">
+        <li><p>Klik menu <strong>"Ubah Sandi"</strong> di halaman Profil.</p></li>
+        <li><p>Masukkan <strong>Sandi Saat Ini</strong>, <strong>Sandi Baru</strong>, dan <strong>Konfirmasi Sandi Baru</strong>.</p></li>
+        <li><p>Password baru minimal <strong>6 karakter</strong>.</p></li>
+        <li><p>Klik <strong>"Ubah Sandi"</strong>. Jika berhasil, dialog otomatis tertutup.</p></li>
+      </ol>
+      <div class="info-box red">
+        <div class="info-icon">🔴</div>
+        <div class="info-text"><strong>Perhatian:</strong> Jangan lupa password baru Anda. Jika lupa, gunakan fitur "Lupa Password" di halaman login.</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ─── SECTION 8: ADMIN DASHBOARD ─── -->
+  <div class="section" id="s8">
+    <div class="section-header">
+      <div class="section-num">8</div>
+      <div class="section-title">Admin Dashboard</div>
+    </div>
+
+    <div class="info-box blue">
+      <div class="info-icon">ℹ️</div>
+      <div class="info-text"><strong>Khusus Administrator:</strong> Halaman ini hanya dapat diakses oleh akun dengan peran admin. Pengguna biasa yang mencoba mengakses <code>/admin</code> akan diarahkan ke halaman login.</div>
+    </div>
+
+    <p style="font-size:0.9rem; margin: 1rem 0;">
+      Admin Dashboard memiliki tiga tab utama: <strong>Sistem</strong>, <strong>Monitoring</strong>, dan <strong>Pengguna</strong>.
+    </p>
+
+    <div class="card">
+      <div class="card-title">⚙️ Tab Sistem</div>
+      <p style="font-size:0.88rem; margin-bottom:0.75rem;">Menampilkan status menyeluruh sistem IoT:</p>
+      <ul style="font-size:0.88rem; margin-left:1.25rem; line-height:2;">
+        <li><strong>Kartu Baterai</strong> — visualisasi persentase baterai perangkat</li>
+        <li><strong>Kartu Status Perangkat</strong> — online/offline perangkat IoT</li>
+        <li><strong>Kartu Sinyal</strong> — CSQ dan kualitas sinyal GSM</li>
+        <li><strong>Kontrol Pompa</strong> — sama dengan di dashboard pengguna</li>
+        <li><strong>Riwayat Pompa</strong> — 20 entri terakhir aktivasi pompa</li>
+        <li><strong>Grafik pH</strong> — tren perubahan pH</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📡 Tab Monitoring</div>
+      <p style="font-size:0.88rem; margin-bottom:0.75rem;">Menampilkan data sensor secara detail:</p>
+      <ul style="font-size:0.88rem; margin-left:1.25rem; line-height:2;">
+        <li>Nilai <strong>pH</strong> real-time dengan skala warna</li>
+        <li><strong>Status Kolam Ikan</strong> dan <strong>Sawah Padi</strong> berdasarkan pH</li>
+        <li><strong>Selisih ketinggian air</strong> (meter visual)</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title">👥 Tab Pengguna</div>
+      <p style="font-size:0.88rem; margin-bottom:0.75rem;">Manajemen akun pengguna:</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Aksi</th><th>Cara Melakukan</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Lihat Daftar Pengguna</strong></td><td>Tab Pengguna menampilkan tabel semua akun terdaftar.</td></tr>
+            <tr><td><strong>Kirim Pesan ke Pengguna</strong></td><td>Klik ikon 💬 pada baris pengguna, ketik pesan, klik "Kirim".</td></tr>
+            <tr><td><strong>Hapus Pengguna</strong></td><td>Klik ikon 🗑️ merah, konfirmasi dialog, pengguna akan dihapus dari database.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🔑 Ubah Password Admin</div>
+      <ol class="steps">
+        <li><p>Klik tombol <strong>"Ubah Password"</strong> di header admin (pojok kanan atas).</p></li>
+        <li><p>Isi <strong>Password Lama</strong>, <strong>Password Baru</strong>, dan <strong>Konfirmasi</strong>.</p></li>
+        <li><p>Klik konfirmasi. Setelah berhasil, sistem akan otomatis logout.</p></li>
+        <li><p>Login kembali dengan password baru.</p></li>
+      </ol>
+    </div>
+  </div>
+
+
+  <!-- ─── SECTION 9: PESAN ADMIN ─── -->
+  <div class="section" id="s9">
+    <div class="section-header">
+      <div class="section-num">9</div>
+      <div class="section-title">Pesan dari Administrator</div>
+    </div>
+
+    <p style="font-size:0.9rem; margin-bottom:1rem;">
+      Administrator dapat mengirim pesan langsung kepada pengguna. Pesan akan ditampilkan di bagian atas dashboard secara otomatis.
+    </p>
+
+    <div class="card">
+      <div class="card-title">💬 Membaca &amp; Menanggapi Pesan</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Aksi</th><th>Cara Melakukan</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Melihat Pesan</strong></td><td>Pesan muncul otomatis di atas dashboard. Badge biru menunjukkan jumlah pesan belum dibaca.</td></tr>
+            <tr><td><strong>Tandai Sudah Dibaca</strong></td><td>Klik tombol <strong>"Tandai dibaca"</strong> pada pesan yang ingin ditandai.</td></tr>
+            <tr><td><strong>Hapus Pesan</strong></td><td>Klik tombol <strong>"Oke"</strong> untuk menghapus dan menyembunyikan pesan dari tampilan.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="info-box green">
+        <div class="info-icon">✅</div>
+        <div class="info-text">Pesan baru diperbarui otomatis setiap <strong>30 detik</strong>. Tidak perlu me-refresh halaman secara manual.</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ─── SECTION 10: TROUBLESHOOTING ─── -->
+  <div class="section" id="s10">
+    <div class="section-header">
+      <div class="section-num">10</div>
+      <div class="section-title">Troubleshooting</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">❓ Masalah Umum dan Solusinya</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Masalah</th><th>Kemungkinan Penyebab</th><th>Solusi</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><strong>Status Perangkat: Offline</strong></td>
+              <td>Tidak ada data baru dalam 60 detik</td>
+              <td>Periksa koneksi perangkat ESP32 di lapangan. Pastikan SIM card aktif.</td>
+            </tr>
+            <tr>
+              <td><strong>Nilai pH tidak berubah</strong></td>
+              <td>Perangkat offline atau sensor bermasalah</td>
+              <td>Cek status perangkat. Jika offline, hubungi teknisi.</td>
+            </tr>
+            <tr>
+              <td><strong>Pompa tidak merespons</strong></td>
+              <td>Koneksi internet pengguna terputus</td>
+              <td>Refresh halaman dan coba kembali. Pastikan koneksi internet stabil.</td>
+            </tr>
+            <tr>
+              <td><strong>Login gagal terus</strong></td>
+              <td>Nomor/password salah atau akun tidak aktif</td>
+              <td>Gunakan fitur "Lupa Password" atau hubungi administrator.</td>
+            </tr>
+            <tr>
+              <td><strong>OTP tidak diterima</strong></td>
+              <td>Nomor tidak terdaftar atau WhatsApp tidak aktif</td>
+              <td>Pastikan nomor WhatsApp aktif. Coba ulangi setelah beberapa menit.</td>
+            </tr>
+            <tr>
+              <td><strong>Pompa toggle tidak bisa diklik</strong></td>
+              <td>Cooldown 2 detik aktif atau sedang diproses</td>
+              <td>Tunggu beberapa detik dan coba kembali.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="info-box blue">
+      <div class="info-icon">📞</div>
+      <div class="info-text">
+        <strong>Butuh Bantuan Lebih Lanjut?</strong><br>
+        Hubungi tim KKN Margolestari T31 melalui administrator sistem atau penanggung jawab teknis di lapangan.
+      </div>
+    </div>
+  </div>
+
+</div><!-- end .container -->
+
+
+<!-- ═══════════════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════════════ -->
+<div class="footer">
+  <p><strong>TEGASU</strong> — Sistem Monitoring IoT pH &amp; Ketinggian Air</p>
+  <p style="margin-top:0.4rem;">Dikembangkan oleh <strong>KKN Margolestari T31</strong></p>
+  <p style="margin-top:0.4rem; font-size:0.78rem;">
+    Panduan ini berlaku untuk versi web terkini. Untuk pertanyaan teknis, hubungi administrator sistem.
+  </p>
+</div>
+
+</body>
+</html>

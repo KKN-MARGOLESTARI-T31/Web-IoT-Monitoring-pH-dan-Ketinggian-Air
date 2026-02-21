@@ -114,6 +114,7 @@ function aggregateByTimeRange(
   count: number;
 }> {
   const groups: { [key: string]: number[] } = {};
+  const labels: { [key: string]: string } = {};
 
   readings.forEach((reading) => {
     const date = new Date(reading.created_at); // Gunakan created_at dari monitoringLog
@@ -121,15 +122,11 @@ function aggregateByTimeRange(
     let label: string;
 
     if (range === "hour") {
-      // Group by hour: "HH:00" untuk 24 jam terakhir
-      // Menggunakan kombinasi tanggal + jam untuk unique key
       const dateStr = date.toISOString().split("T")[0];
       const hour = date.getHours().toString().padStart(2, "0");
       key = `${dateStr}-${hour}`;
       label = `${hour}:00`;
     } else if (range === "day") {
-      // Group by actual date (YYYY-MM-DD) untuk 7 hari terakhir
-      // Bukan hanya nama hari, tapi tanggal sesungguhnya
       const dateStr = date.toISOString().split("T")[0];
       const dayName = [
         "Minggu",
@@ -141,9 +138,8 @@ function aggregateByTimeRange(
         "Sabtu",
       ][date.getDay()];
       key = dateStr;
-      label = dayName; // Tampilkan nama hari, tapi group by actual date
+      label = dayName;
     } else if (range === "month") {
-      // Group by actual month-year (YYYY-MM) untuk 12 bulan terakhir
       const year = date.getFullYear();
       const month = (date.getMonth() + 1).toString().padStart(2, "0");
       const monthName = [
@@ -163,7 +159,6 @@ function aggregateByTimeRange(
       key = `${year}-${month}`;
       label = monthName;
     } else if (range === "year") {
-      // Group by year
       key = date.getFullYear().toString();
       label = date.getFullYear().toString();
     } else {
@@ -174,15 +169,17 @@ function aggregateByTimeRange(
     if (!groups[key]) {
       groups[key] = [];
     }
-    groups[key].push(reading.ph_value); // Gunakan ph_value dari monitoringLog
+    // Simpan label per key agar tidak hilang saat di-map
+    labels[key] = label;
+    groups[key].push(reading.ph_value);
   });
 
   // Convert to array dengan agregasi
   return Object.entries(groups)
-    .sort((a, b) => a[0].localeCompare(b[0])) // Sort by key untuk konsistensi
+    .sort((a, b) => a[0].localeCompare(b[0]))
     .map(([key, values]) => ({
       timestamp: key,
-      label: key.split("-").pop() || key, // Ambil label dari key jika ada
+      label: labels[key] || key, // Gunakan label asli (nama hari/bulan/jam)
       ph: parseFloat(
         (values.reduce((a, b) => a + b, 0) / values.length).toFixed(2),
       ),
