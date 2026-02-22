@@ -1,12 +1,15 @@
 "use client";
 
+import { Suspense } from "react";
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, CheckCircle } from "lucide-react";
 import PasswordInput from "@/components/PasswordInput";
 
-export default function ResetPasswordPage() {
+// Komponen inti yang menggunakan useSearchParams() —
+// harus dipisah agar bisa dibungkus <Suspense>
+function ResetPasswordForm() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const resetToken = searchParams.get("token") || "";
@@ -21,7 +24,6 @@ export default function ResetPasswordPage() {
         e.preventDefault();
         setError("");
 
-        // Validate passwords
         if (newPassword.length < 6) {
             setError("Password minimal 6 karakter");
             return;
@@ -49,7 +51,6 @@ export default function ResetPasswordPage() {
                 return;
             }
 
-            // Success
             setSuccess(true);
             setTimeout(() => {
                 router.push("/login");
@@ -122,16 +123,13 @@ export default function ResetPasswordPage() {
                             <p className="text-gray-600 mb-1">Kekuatan password:</p>
                             <div className="flex gap-1">
                                 <div
-                                    className={`h-1 flex-1 rounded ${newPassword.length >= 6 ? "bg-green-500" : "bg-gray-200"
-                                        }`}
+                                    className={`h-1 flex-1 rounded ${newPassword.length >= 6 ? "bg-green-500" : "bg-gray-200"}`}
                                 />
                                 <div
-                                    className={`h-1 flex-1 rounded ${newPassword.length >= 8 ? "bg-green-500" : "bg-gray-200"
-                                        }`}
+                                    className={`h-1 flex-1 rounded ${newPassword.length >= 8 ? "bg-green-500" : "bg-gray-200"}`}
                                 />
                                 <div
-                                    className={`h-1 flex-1 rounded ${newPassword.length >= 10 ? "bg-green-500" : "bg-gray-200"
-                                        }`}
+                                    className={`h-1 flex-1 rounded ${newPassword.length >= 10 ? "bg-green-500" : "bg-gray-200"}`}
                                 />
                             </div>
                         </div>
@@ -153,5 +151,21 @@ export default function ResetPasswordPage() {
                 </form>
             </div>
         </div>
+    );
+}
+
+// Halaman utama — membungkus komponen dengan <Suspense>
+// agar useSearchParams() tidak menyebabkan error saat prerendering
+export default function ResetPasswordPage() {
+    return (
+        <Suspense
+            fallback={
+                <div className="min-h-screen flex items-center justify-center bg-gray-50">
+                    <p className="text-gray-500">Memuat halaman...</p>
+                </div>
+            }
+        >
+            <ResetPasswordForm />
+        </Suspense>
     );
 }
