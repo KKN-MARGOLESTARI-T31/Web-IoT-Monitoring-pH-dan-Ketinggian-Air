@@ -1,11 +1,14 @@
 "use client";
 
+import { Suspense } from "react";
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
-export default function VerifyOTPPage() {
+// Komponen inti yang menggunakan useSearchParams() —
+// harus dipisah agar bisa dibungkus <Suspense>
+function VerifyOTPForm() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const phone = searchParams.get("phone") || "";
@@ -38,7 +41,6 @@ export default function VerifyOTPPage() {
     // Countdown timer logic
     useEffect(() => {
         if (timeLeft <= 0) {
-            // Don't show error immediately on load if 0, only if it counts down to 0
             return;
         }
 
@@ -52,11 +54,6 @@ export default function VerifyOTPPage() {
             });
         }, 1000);
 
-        // Allow resend if less than 4 minutes left (meaning 1 min passed)
-        // Or just simplify: allow resend when timer ends? 
-        // Usually allow resend after 60s. 
-        // Let's implement independent resend timer or just check metrics.
-        // For now: allow resend after 60s from start (300 -> 240)
         if (timeLeft < 240) {
             setCanResend(true);
         } else {
@@ -102,7 +99,7 @@ export default function VerifyOTPPage() {
 
     const handleResend = async () => {
         setError("");
-        setIsLoading(true); // Show loading state on button or global
+        setIsLoading(true);
 
         try {
             const response = await fetch("/api/auth/forgot-password/request", {
@@ -115,10 +112,8 @@ export default function VerifyOTPPage() {
 
             if (response.ok) {
                 alert("OTP baru telah dikirim!");
-                // Update timer
                 const expiresIn = data.expiresIn || 300;
                 const newExpiry = Date.now() + expiresIn * 1000;
-                // Update URL to persist new expiry on refresh
                 router.replace(`/forgot-password/verify-otp?phone=${encodeURIComponent(phone)}&expiry=${newExpiry}`);
                 setTimeLeft(expiresIn);
                 setCanResend(false);
@@ -170,13 +165,13 @@ export default function VerifyOTPPage() {
                         />
                     </div>
 
-                    <div className="text-center h-6"> {/* Fixed height to prevent layout shift */}
+                    <div className="text-center h-6">
                         {timeLeft > 0 ? (
                             <p className="text-sm text-gray-600">
                                 Kode berlaku: <span className="font-semibold">{formatTime(timeLeft)}</span>
                             </p>
                         ) : (
-                            expiryParam && ( // Only show expired if we actually had a timer
+                            expiryParam && (
                                 <p className="text-sm text-red-600 font-semibold">
                                     OTP sudah kadaluarsa
                                 </p>
@@ -215,5 +210,21 @@ export default function VerifyOTPPage() {
                 </p>
             </div>
         </div>
+    );
+}
+
+// Halaman utama — membungkus komponen dengan <Suspense>
+// agar useSearchParams() tidak menyebabkan error saat prerendering
+export default function VerifyOTPPage() {
+    return (
+        <Suspense
+            fallback={
+                <div className="min-h-screen flex items-center justify-center bg-gray-50">
+                    <p className="text-gray-500">Memuat halaman...</p>
+                </div>
+            }
+        >
+            <VerifyOTPForm />
+        </Suspense>
     );
 }
